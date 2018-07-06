@@ -8,12 +8,15 @@
                     <h2>Balaio de Livros</h2>
                     <h4>Sistema de troca de livros</h4>
                     <hr class="intro-divider">
-                      <div class="busca" >
-                        <input type="text" id="campo_busca" placeholder="O que você procura?">
-                          <button type="submit" onclick="" class="buscar_produto">
+                    {% from "_formhelpers.html" import render_field %}
+                     <form action= "{{ url_for('search') }}" method="POST" >
+                      <div class="form-group" >
+                          <input type="text" id="input_search" placeholder="O que você procura?">
+                          <button type="submit" onclick="" class="button_search">
                               <i class="fa fa-search" action="" ></i>
                           </button>
                         </div>
+                     </form>
                     </div>
                     </ul>
                 </div>

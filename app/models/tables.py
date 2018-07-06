@@ -1,10 +1,19 @@
-from app import db, login_manager
+from app import app, db, login_manager
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+import sys
+
+if sys.version_info >= (3, 0):
+    enable_search = False
+else:
+    enable_search = True
+    import flask_whooshalchemy as whooshalchemy
+
 
 
 class User(UserMixin, db.Model):
     __tablename__ = "users"
+    __searchable__ = ['name', 'email', 'reputation']
 
     cpfuser = db.Column(db.Integer, primary_key=True, unique=True, nullable=False)
     name = db.Column(db.String(80), nullable=False)
@@ -49,6 +58,7 @@ class User(UserMixin, db.Model):
      
 class Book(db.Model):
     __tablename__ = "books"
+    __searchable__ = ['title', 'author','school', 'translateversion', 'price', 'type']
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     title = db.Column(db.String(80), nullable=False)
@@ -58,13 +68,14 @@ class Book(db.Model):
     edition =   db.Column(db.String(80), nullable=False)
     translateversion = db.Column(db.String(80))
     phisicalstate = db.Column(db.Text, nullable=False)
-    sold = db.Column(db.Integer)
+    type = db.Column(db.String(80), nullable=False)
+    #sold = db.Column(db.Integer)
     price = db.Column(db.Float)
     user_cpf = db.Column(db.Integer, db.ForeignKey("users.cpfuser"))
     
     user = db.relationship('User', foreign_keys = user_cpf)
 
-    def __init__ (self, title, author, serie, school, edition, translateversion, phisicalstate, sold, price, user_cpf):
+    def __init__ (self, title, author, serie, school, edition, translateversion, phisicalstate, price, user_cpf, type):
         self.title = title
         self.author = author
         self.serie = serie
@@ -72,9 +83,9 @@ class Book(db.Model):
         self.edition = edition
         self.translateversion = translateversion
         self.phisicalstate = phisicalstate
-        self.sold = sold
         self.price = price
         self.user_cpf= user_cpf
+        self.type = type
 
     def __repr__(self):
         return "<Book %r>" % self.title     
@@ -112,3 +123,22 @@ class Ad(db.Model):
     
     def __repr__(self):
         return "<Interest %r>"% self.book_id
+
+class BookImage(db.Model):
+    __tablename__ = "bookimages"
+
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    data = db.Column(db.LargeBinary)
+    name = db.Column(db.String(80))
+    book_id = db.Column(db.Integer, db.ForeignKey("books.id"))
+
+    book = db.relationship('Book', foreign_keys=book_id)
+
+    def __init__(self, data, name, book_id):
+        self.data = data
+        self.name= name
+        self.book_id = book_id
+
+
+if enable_search:
+    whooshalchemy.whoosh_index(app, Book)

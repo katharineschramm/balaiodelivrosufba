@@ -175,13 +175,13 @@ footer {
 footer p {
     margin-bottom: .25rem;
 }
-.busca{
+.search{
     float: center;
 	margin: 0px auto;
     padding:0px;
     height: 48px;
 }
-#campo_busca{
+#input_search{
     padding-left: 10px;
     border: 1px solid;
     border-radius: 5px 0px 0px 5px;
@@ -190,7 +190,7 @@ footer p {
     width: 523px;
 
 }
-.buscar_produto{
+.button_search{
     border: 0px solid;
     border-radius: 0px 5px 5px 0px;
     color:#C0C0C0;

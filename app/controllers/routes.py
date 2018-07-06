@@ -1,7 +1,7 @@
 from app import app
-from flask import render_template
+from flask import render_template, redirect, request
 
-#from app.models.table import User
+from app.models.searchModel import searchModel
 #from app.models.forms import LoginForm
 
 
@@ -17,4 +17,5 @@ def login():
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', title= "Balaio de livros")
+    form = searchModel()
+    return render_template("index.html", title = "Balaio de Livros", form=form)

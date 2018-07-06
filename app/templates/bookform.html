@@ -14,7 +14,7 @@
               {{form.author(class= "form-control")}}
             </div>
           </div>
-          <div class="row">
+            <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="serie">Serie</label>
                   {{form.serie(class= "form-control")}}
@@ -24,6 +24,13 @@
                   {{form.edition(class= "form-control")}}
                 </div>
               </div>
+            <div class="row">
+            <!---<div class=" col-md-6 mb-3">-->
+             {% for subfield in form.type %}
+                <div class=" col-md-6 mb-3">{{ subfield }} {{ subfield.label }}</div>
+             {% endfor %}
+            </div>
+            </div>
           <div class="mb-3">
                 <label for="school">Escola</label>
                 {{form.school(class= "form-control")}}
